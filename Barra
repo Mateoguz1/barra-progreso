@@ -49,6 +49,21 @@
     // Guardar en localStorage
     localStorage.setItem("cash", cash);
   }
+  // Verificar si es lunes y reiniciar si ya pasó una semana
+  const hoy = new Date();
+  const ultimoUpdate = localStorage.getItem("ultimaActualizacion");
+
+  if (ultimoUpdate) {
+    const ultimaFecha = new Date(ultimoUpdate);
+    const esNuevoLunes = hoy.getDay() === 1 && hoy.toDateString() !== ultimaFecha.toDateString();
+    if (esNuevoLunes) {
+      localStorage.removeItem("cash");
+      localStorage.setItem("ultimaActualizacion", hoy.toString());
+    }
+  } else {
+    // Guardar primera vez
+    localStorage.setItem("ultimaActualizacion", hoy.toString());
+  }
 
   // Cargar valor guardado al abrir la página
   window.onload = () => {
