@@ -8,7 +8,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #0a0f2c;
+      background: #050d1a;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -26,26 +26,27 @@
     .porcentaje {
       font-size: 2.5rem;
       margin-bottom: 20px;
-      color: #00ffe7;
+      color: #00bfff;
       font-weight: bold;
+      text-shadow: 0 0 8px #00bfff;
     }
 
     .barra-container {
       width: 80%;
       max-width: 900px;
       height: 40px;
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: rgba(255, 255, 255, 0.05);
       border-radius: 30px;
       overflow: hidden;
-      box-shadow: 0 0 20px #00f0ff44;
+      box-shadow: 0 0 25px #008cff44;
       margin-bottom: 10px;
     }
 
     .barra {
       height: 100%;
       width: 0%;
-      background: linear-gradient(to right, #00f0ff, #ff00ff);
-      box-shadow: 0 0 20px #00f0ff, 0 0 30px #ff00ff;
+      background: linear-gradient(to right, #00bfff, #005bff);
+      box-shadow: 0 0 30px #00bfff, 0 0 60px #005bff;
       transition: width 0.8s ease;
       border-radius: 30px;
     }
@@ -57,11 +58,11 @@
       max-width: 900px;
       margin: 10px 0 30px 0;
       font-size: 1rem;
-      color: #ccc;
+      color: #aaa;
     }
 
     input[type="number"] {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.07);
       border: none;
       border-radius: 10px;
       padding: 12px 20px;
@@ -70,7 +71,7 @@
       outline: none;
       width: 180px;
       text-align: center;
-      box-shadow: 0 0 10px #ffffff22;
+      box-shadow: 0 0 10px #005bff55;
     }
   </style>
 </head>
@@ -110,7 +111,7 @@
       localStorage.setItem("ultimaActualizacion", new Date().toString());
     }
 
-    // Reinicio automático los lunes
+    // Reinicio automático cada lunes
     const hoy = new Date();
     const ultimoUpdate = localStorage.getItem("ultimaActualizacion");
     if (ultimoUpdate) {
