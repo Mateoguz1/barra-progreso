@@ -7,85 +7,76 @@
     body {
       margin: 0;
       padding: 0;
-      background: #0a0f2c;
       font-family: 'Segoe UI', sans-serif;
+      background: #0a0f2c;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      color: #fff;
     }
 
     h1 {
       font-size: 3rem;
       margin-bottom: 40px;
-      color: #ffffffcc;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
     }
 
-    .input-box {
-      margin-bottom: 40px;
-    }
-
-    input[type="number"] {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #ffffff33;
-      border-radius: 10px;
-      padding: 15px 20px;
-      font-size: 1.5rem;
-      color: #fff;
-      outline: none;
-      width: 200px;
-      text-align: center;
+    .porcentaje {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #00ffe7;
+      font-weight: bold;
     }
 
     .barra-container {
-      width: 90%;
+      width: 80%;
       max-width: 900px;
+      height: 40px;
       background-color: rgba(255, 255, 255, 0.08);
-      border-radius: 50px;
-      height: 35px;
+      border-radius: 30px;
       overflow: hidden;
-      box-shadow: 0 0 15px #0ff;
-      position: relative;
+      box-shadow: 0 0 20px #00f0ff44;
+      margin-bottom: 10px;
     }
 
     .barra {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #00f0ff, #ff00ff);
-      box-shadow: 0 0 15px #00f0ff, 0 0 30px #ff00ff;
+      background: linear-gradient(to right, #00f0ff, #ff00ff);
+      box-shadow: 0 0 20px #00f0ff, 0 0 30px #ff00ff;
       transition: width 0.8s ease;
-      border-radius: 50px;
+      border-radius: 30px;
     }
 
     .marcadores {
       display: flex;
       justify-content: space-between;
-      width: 90%;
+      width: 80%;
       max-width: 900px;
-      margin-top: 15px;
+      margin: 10px 0 30px 0;
       font-size: 1rem;
-      color: #aaa;
-      letter-spacing: 1px;
+      color: #ccc;
     }
 
-    .porcentaje {
-      font-size: 2rem;
-      margin: 20px 0 10px;
-      color: #0ff;
+    input[type="number"] {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      color: #fff;
+      outline: none;
+      width: 180px;
+      text-align: center;
+      box-shadow: 0 0 10px #ffffff22;
     }
   </style>
 </head>
 <body>
 
-  <h1>Objetivo semanal</h1>
-
-  <div class="input-box">
-    <input type="number" id="cash" placeholder="Ingresar monto" oninput="actualizarBarra()" />
-  </div>
+  <h1>OBJETIVO SEMANAL</h1>
 
   <div class="porcentaje" id="porcentaje-texto">0%</div>
 
@@ -94,9 +85,11 @@
   </div>
 
   <div class="marcadores">
-    <span>$1K</span><span>$2K</span><span>$3K</span><span>$4K</span><span>$5K</span>
-    <span>$6K</span><span>$7K</span><span>$8K</span><span>$9K</span><span>$10K</span>
+    <span>$1K</span>
+    <span>$10K</span>
   </div>
+
+  <input type="number" id="cash" placeholder="Ingresar monto" oninput="actualizarBarra()" />
 
   <script>
     const meta = 10000;
@@ -104,6 +97,8 @@
     function actualizarBarra() {
       const input = document.getElementById("cash").value;
       const cash = parseFloat(input);
+      if (isNaN(cash)) return;
+
       const porcentaje = Math.min((cash / meta) * 100, 100);
       const barra = document.getElementById("barra");
       const texto = document.getElementById("porcentaje-texto");
@@ -115,7 +110,7 @@
       localStorage.setItem("ultimaActualizacion", new Date().toString());
     }
 
-    // Reinicio automático cada lunes
+    // Reinicio automático los lunes
     const hoy = new Date();
     const ultimoUpdate = localStorage.getItem("ultimaActualizacion");
     if (ultimoUpdate) {
@@ -129,7 +124,7 @@
       localStorage.setItem("ultimaActualizacion", hoy.toString());
     }
 
-    // Cargar valor guardado
+    // Cargar al inicio
     window.onload = () => {
       const cashGuardado = localStorage.getItem("cash");
       if (cashGuardado !== null) {
@@ -138,5 +133,6 @@
       }
     };
   </script>
+
 </body>
 </html>
