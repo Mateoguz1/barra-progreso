@@ -5,41 +5,47 @@
   <title>Progreso Semanal</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #a8edea, #fed6e3);
       margin: 0;
-      padding: 40px;
-      text-align: center;
-      color: #333;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
     h1 {
-      margin-bottom: 10px;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    .porcentaje {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
     }
 
     .barra-container {
-      position: relative;
       width: 80%;
       max-width: 700px;
-      margin: 40px auto 10px auto;
-      background-color: #eee;
-      border-radius: 25px;
-      height: 35px;
+      height: 25px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px #00ffff44;
     }
 
     .barra {
       height: 100%;
-      background: linear-gradient(to right, #06beb6, #48b1bf);
       width: 0%;
-      border-radius: 25px 0 0 25px;
-      text-align: right;
-      color: white;
-      line-height: 35px;
-      padding-right: 10px;
-      box-sizing: border-box;
-      transition: width 0.6s ease-in-out;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      border-radius: 20px;
+      transition: width 0.5s ease;
     }
 
     .etiquetas {
@@ -47,111 +53,57 @@
       justify-content: space-between;
       width: 80%;
       max-width: 700px;
-      margin: 10px auto;
-      font-size: 0.9em;
-      color: #444;
-    }
-
-    .info {
-      margin-top: 10px;
-      font-size: 1.1em;
-    }
-
-    input[type="number"] {
-      padding: 8px;
-      width: 120px;
-      margin-right: 10px;
-      border-radius: 5px;
-      border: 1px solid #aaa;
-    }
-
-    button {
-      padding: 8px 15px;
-      background-color: #48b1bf;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #369da6;
-    }
-
-    .mensaje-exito {
-      color: green;
-      font-weight: bold;
-      margin-top: 10px;
+      margin-top: 15px;
+      font-size: 0.85rem;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
 
-<h1>Cash Collected esta semana</h1>
+  <h1>Cash Collected</h1>
+  <div class="porcentaje" id="porcentaje-texto">0%</div>
 
-<div class="barra-container">
-  <div id="barra" class="barra">0%</div>
-</div>
+  <div class="barra-container">
+    <div id="barra" class="barra"></div>
+  </div>
 
-<div class="etiquetas">
-  <span>$1K</span><span>$2K</span><span>$3K</span><span>$4K</span><span>$5K</span><span>$6K</span><span>$7K</span><span>$8K</span><span>$9K</span><span>$10K</span>
-</div>
+  <div class="etiquetas">
+    <span>$1K</span><span>$2K</span><span>$3K</span><span>$4K</span><span>$5K</span>
+    <span>$6K</span><span>$7K</span><span>$8K</span><span>$9K</span><span>$10K</span>
+  </div>
 
-<div class="info">
-  <label for="cash">Ingresar cash ($): </label>
-  <input type="number" id="cash" value="0">
-  <button onclick="actualizarBarra()">Actualizar</button>
-</div>
+  <script>
+    const meta = 10000;
 
-<div id="mensaje" class="mensaje-exito"></div>
+    // Simular carga automática
+    const cashGuardado = localStorage.getItem("cash") || "0";
 
-<script>
-  const meta = 10000;
-
-  function actualizarBarra() {
-    const input = document.getElementById("cash").value;
-    const cash = parseFloat(input);
-    const porcentaje = Math.min((cash / meta) * 100, 100);
-    const barra = document.getElementById("barra");
-    barra.style.width = porcentaje + "%";
-    barra.textContent = Math.floor(porcentaje) + "%";
-
-    localStorage.setItem("cash", cash);
-    localStorage.setItem("ultimaActualizacion", new Date().toString());
-
-    const mensaje = document.getElementById("mensaje");
-    if (porcentaje >= 100) {
-      mensaje.textContent = "🎉 ¡Meta alcanzada!";
-    } else {
-      mensaje.textContent = `$${cash.toLocaleString()} recaudados de $10,000`;
+    function actualizarBarra(cash) {
+      const porcentaje = Math.min((cash / meta) * 100, 100);
+      const barra = document.getElementById("barra");
+      barra.style.width = porcentaje + "%";
+      document.getElementById("porcentaje-texto").textContent = Math.floor(porcentaje) + "%";
     }
-  }
 
-  // Reinicio automático los lunes
-  const hoy = new Date();
-  const ultimoUpdate = localStorage.getItem("ultimaActualizacion");
-
-  if (ultimoUpdate) {
-    const ultimaFecha = new Date(ultimoUpdate);
-    const esLunes = hoy.getDay() === 1;
-    const esNuevoLunes = esLunes && hoy.toDateString() !== ultimaFecha.toDateString();
-    if (esNuevoLunes) {
-      localStorage.removeItem("cash");
+    // Reinicio automático los lunes
+    const hoy = new Date();
+    const ultimoUpdate = localStorage.getItem("ultimaActualizacion");
+    if (ultimoUpdate) {
+      const ultimaFecha = new Date(ultimoUpdate);
+      const esLunes = hoy.getDay() === 1;
+      const esNuevoLunes = esLunes && hoy.toDateString() !== ultimaFecha.toDateString();
+      if (esNuevoLunes) {
+        localStorage.removeItem("cash");
+        localStorage.setItem("ultimaActualizacion", hoy.toString());
+      }
+    } else {
       localStorage.setItem("ultimaActualizacion", hoy.toString());
     }
-  } else {
-    localStorage.setItem("ultimaActualizacion", hoy.toString());
-  }
 
-  // Cargar progreso al inicio
-  window.onload = () => {
-    const cashGuardado = localStorage.getItem("cash");
-    if (cashGuardado !== null) {
-      document.getElementById("cash").value = cashGuardado;
-      actualizarBarra();
-    }
-  };
-</script>
+    // Cargar y mostrar
+    actualizarBarra(parseFloat(localStorage.getItem("cash") || 0));
+  </script>
 
 </body>
 </html>
