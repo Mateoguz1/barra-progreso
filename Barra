@@ -34,18 +34,7 @@
 <input type="number" id="cash" value="0">
 <button onclick="actualizarBarra()">Actualizar</button>
 
-<script>
-  const meta = 10000;
 
-  function actualizarBarra() {
-    const input = document.getElementById("cash").value;
-    const cash = parseFloat(input);
-    const porcentaje = Math.min((cash / meta) * 100, 100);
-    const barra = document.getElementById("barra");
-    barra.style.width = porcentaje + "%";
-    barra.textContent = Math.floor(porcentaje) + "%";
-  }
-</script>
 <script>
   const meta = 10000;
 
