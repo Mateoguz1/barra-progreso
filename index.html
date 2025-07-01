@@ -1,4 +1,10 @@
-body {
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Objetivo Semanal</title>
+  <style>
+    body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -76,3 +82,67 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+  </style>
+</head>
+<body>
+
+  <h1>OBJETIVO SEMANAL</h1>
+
+  <div class="porcentaje" id="porcentaje-texto">0%</div>
+
+  <div class="barra-container">
+    <div id="barra" class="barra"></div>
+  </div>
+
+  <div class="marcadores">
+    <span>$1K</span>
+    <span>$10K</span>
+  </div>
+
+  <input type="number" id="cash" placeholder="Ingresar monto" oninput="actualizarBarra()" />
+
+  <script>
+    const meta = 10000;
+
+    function actualizarBarra() {
+      const input = document.getElementById("cash").value;
+      const cash = parseFloat(input);
+      if (isNaN(cash)) return;
+
+      const porcentaje = Math.min((cash / meta) * 100, 100);
+      const barra = document.getElementById("barra");
+      const texto = document.getElementById("porcentaje-texto");
+
+      barra.style.width = porcentaje + "%";
+      texto.textContent = Math.floor(porcentaje) + "%";
+
+      localStorage.setItem("cash", cash);
+      localStorage.setItem("ultimaActualizacion", new Date().toString());
+    }
+
+    // Reinicio automático cada lunes
+    const hoy = new Date();
+    const ultimoUpdate = localStorage.getItem("ultimaActualizacion");
+    if (ultimoUpdate) {
+      const ultimaFecha = new Date(ultimoUpdate);
+      const esNuevoLunes = hoy.getDay() === 1 && hoy.toDateString() !== ultimaFecha.toDateString();
+      if (esNuevoLunes) {
+        localStorage.removeItem("cash");
+        localStorage.setItem("ultimaActualizacion", hoy.toString());
+      }
+    } else {
+      localStorage.setItem("ultimaActualizacion", hoy.toString());
+    }
+
+    // Cargar al inicio
+    window.onload = () => {
+      const cashGuardado = localStorage.getItem("cash");
+      if (cashGuardado !== null) {
+        document.getElementById("cash").value = cashGuardado;
+        actualizarBarra();
+      }
+    };
+  </script>
+
+</body>
+</html>
